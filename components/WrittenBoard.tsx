@@ -38,7 +38,7 @@ export default function WrittenBoard({ children }: { children: ReactNode }) {
     const timer = setTimeout(() => {
       notes.forEach((note) => {
         const el = note as HTMLElement;
-        const delay = (Math.random() * 9).toFixed(2);
+        const delay = (8 + Math.random() * 40).toFixed(2); // 8〜48s：最初の8秒は静かに、以降48sサイクルで均等にばらける
         el.style.setProperty('--hop-delay', `${delay}s`);
         el.style.opacity = '1'; // note-hop は opacity を扱わないため明示
         el.classList.add('note-alive');
