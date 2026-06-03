@@ -37,9 +37,11 @@ export default function WrittenBoard({ children }: { children: ReactNode }) {
     const maxEntrance = 2600 + notes.length * 70 + 600; // ms
     const timer = setTimeout(() => {
       notes.forEach((note) => {
+        const el = note as HTMLElement;
         const delay = (Math.random() * 9).toFixed(2);
-        (note as HTMLElement).style.setProperty('--hop-delay', `${delay}s`);
-        note.classList.add('note-alive');
+        el.style.setProperty('--hop-delay', `${delay}s`);
+        el.style.opacity = '1'; // note-hop は opacity を扱わないため明示
+        el.classList.add('note-alive');
       });
     }, maxEntrance);
 
