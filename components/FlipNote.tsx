@@ -29,7 +29,6 @@ export default function FlipNote({ original, translation, question, colorClass, 
     <span
       className={`note ${colorClass} ${rotClass} note-interactive${isQuestion ? ' note-is-question' : ''}${fading ? ' note-fading' : ''}`}
       onClick={handleClick}
-      title={isQuestion ? 'タップで戻る' : undefined}
     >
       <span className="note-main">
         {isQuestion ? question : original}

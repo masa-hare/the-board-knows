@@ -26,10 +26,24 @@ export default function WrittenBoard({ children }: { children: ReactNode }) {
     if (!active) return;
     const el = ref.current;
     if (!el) return;
-    // 各付箋にインデックスを渡してstagger計算
-    el.querySelectorAll('.note').forEach((note, i) => {
+
+    // 入場stagger用インデックスをセット
+    const notes = el.querySelectorAll('.note');
+    notes.forEach((note, i) => {
       (note as HTMLElement).style.setProperty('--note-i', String(i));
     });
+
+    // 入場アニメが終わったあと、各付箋にバラバラのホップ遅延をセットして生き生きさせる
+    const maxEntrance = 2600 + notes.length * 70 + 600; // ms
+    const timer = setTimeout(() => {
+      notes.forEach((note) => {
+        const delay = (Math.random() * 9).toFixed(2);
+        (note as HTMLElement).style.setProperty('--hop-delay', `${delay}s`);
+        note.classList.add('note-alive');
+      });
+    }, maxEntrance);
+
+    return () => clearTimeout(timer);
   }, [active]);
 
   return (
