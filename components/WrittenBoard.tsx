@@ -34,7 +34,7 @@ export default function WrittenBoard({ children }: { children: ReactNode }) {
     });
 
     // 入場アニメが終わったあと、各付箋にバラバラのホップ遅延をセットして生き生きさせる
-    const maxEntrance = 2600 + notes.length * 70 + 600; // ms
+    const maxEntrance = 500 + notes.length * 70 + 600; // ms
     const timer = setTimeout(() => {
       notes.forEach((note) => {
         const el = note as HTMLElement;

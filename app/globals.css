@@ -130,40 +130,20 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
    WRITTEN BOARD ANIMATION
 ══════════════════════════════════════ */
 
-/* ① 週ヘッダー：フェードアップ */
-.wb-anim .week-head {
+/* ① 週ヘッダー＋赤マーカー：同時にフェードアップ */
+.wb-anim .week-head,
+.wb-anim .board-q,
+.wb-anim .board-q-en {
   opacity: 0;
   transform: translateY(14px);
 }
-.wb-anim--on .week-head {
+.wb-anim--on .week-head,
+.wb-anim--on .board-q,
+.wb-anim--on .board-q-en {
   animation: wb-fade-up 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.05s forwards;
 }
 @keyframes wb-fade-up {
   to { opacity: 1; transform: translateY(0); }
-}
-
-/* ② ボード問い（赤マーカー）：ペン書きスイープ */
-.wb-anim .board-q {
-  clip-path: inset(0 100% 0 0);
-  opacity: 0;
-}
-.wb-anim--on .board-q {
-  animation: pen-sweep 1.6s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
-}
-
-/* ③ 英語サブテキスト：遅れてスイープ */
-.wb-anim .board-q-en {
-  clip-path: inset(0 100% 0 0);
-  opacity: 0;
-}
-.wb-anim--on .board-q-en {
-  animation: pen-sweep 1.0s cubic-bezier(0.16, 1, 0.3, 1) 2.1s forwards;
-}
-
-@keyframes pen-sweep {
-  0%   { clip-path: inset(0 100% 0 0); opacity: 0.2; }
-  6%   { opacity: 1; }
-  100% { clip-path: inset(0 0% 0 0); opacity: 1; }
 }
 
 /* ④ スペクトラム（Week 2）*/
@@ -171,7 +151,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
   opacity: 0;
 }
 .wb-anim--on .spectrum {
-  animation: wb-fade-up 0.5s ease 3.1s forwards;
+  animation: wb-fade-up 0.5s ease 0.4s forwards;
 }
 
 /* ⑤ 付箋：スプリングでポンポン貼られる */
@@ -180,7 +160,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
 }
 .wb-anim--on .note {
   animation: note-stick 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)
-    calc(2.6s + var(--note-i, 0) * 0.07s) forwards;
+    calc(0.5s + var(--note-i, 0) * 0.07s) forwards;
 }
 
 @keyframes note-stick {
