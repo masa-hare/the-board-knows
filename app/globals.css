@@ -5,6 +5,7 @@
   --gn: #B8E6B0; --gndk: #153d11;
   --og: #FFD0A0; --ogdk: #4a2600;
   --ink: #1a1a1a; --muted: #aaa; --cream: #FDFCF7;
+  --font-jp: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
