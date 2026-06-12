@@ -101,12 +101,15 @@ body { background: var(--cream); color: var(--ink); }
   box-shadow: 2px 3px 0 rgba(0,0,0,.12);
   cursor: pointer;
   user-select: none;
-  transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 0.2s ease;
+  transition: translate 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              scale 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+              rotate 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 .hero-sticky-wobbly:hover,
 .hero-sticky-wobbly:active {
-  transform: rotate(0deg) scale(1.18) translateY(-6px) !important;
+  scale: 1.18 !important;
+  translate: 0 -6px !important;
+  rotate: 0deg !important;
   box-shadow: 4px 8px 0 rgba(0,0,0,.15);
 }
 
@@ -179,6 +182,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
 /* 入場アニメより高い詳細度で上書き・opacity を明示して隠れないようにする */
 .wb-anim--on .note.note-alive {
   opacity: 1;
+  will-change: translate, scale;
   animation: note-hop 48s cubic-bezier(0.34, 1.56, 0.64, 1)
     var(--hop-delay, 0s) infinite;
 }
@@ -215,7 +219,8 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
   font-size: 10px; line-height: 1.45; text-align: center;
   box-shadow: 2px 3px 0 rgba(0,0,0,.13), 0 1px 2px rgba(0,0,0,.05);
   cursor: default; word-break: break-word; overflow: hidden; position: relative;
-  transition: opacity 0.14s ease, transform .18s ease, box-shadow .18s;
+  transition: opacity 0.14s ease;
+  contain: layout style paint;
 }
 .note-main {
   display: -webkit-box;
@@ -229,7 +234,9 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
   height: 3px; border-radius: 3px 3px 0 0; background: rgba(0,0,0,.07);
 }
 .note:hover {
-  transform: rotate(0deg) scale(1.1) !important;
+  scale: 1.1 !important;
+  translate: 0 0 !important;
+  rotate: 0deg !important;
   box-shadow: 4px 7px 0 rgba(0,0,0,.15);
   z-index: 10;
 }
@@ -296,11 +303,11 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
 .ng { background: var(--gn); color: var(--gndk); }
 .no { background: var(--og); color: var(--ogdk); }
 
-.rot-a { transform: rotate(-3.5deg); } .rot-b { transform: rotate(2deg); }
-.rot-c { transform: rotate(-1deg); }   .rot-d { transform: rotate(3.2deg); }
-.rot-e { transform: rotate(-2.5deg); } .rot-f { transform: rotate(1.2deg); }
-.rot-g { transform: rotate(4deg); }   .rot-h { transform: rotate(-4.2deg); }
-.rot-i { transform: rotate(.5deg); }  .rot-j { transform: rotate(-1.8deg); }
+.rot-a { rotate: -3.5deg; } .rot-b { rotate: 2deg; }
+.rot-c { rotate: -1deg; }  .rot-d { rotate: 3.2deg; }
+.rot-e { rotate: -2.5deg; }.rot-f { rotate: 1.2deg; }
+.rot-g { rotate: 4deg; }   .rot-h { rotate: -4.2deg; }
+.rot-i { rotate: .5deg; }  .rot-j { rotate: -1.8deg; }
 
 /* ══════════════════════════════════════
    SPECTRUM
