@@ -260,13 +260,33 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
 }
 .note-interactive:hover .note-trans { opacity: 0.85; }
 
-/* 問い状態：翻訳オーバーレイなし、テキストフェードさせない */
+/* 問い状態：ホップ停止、ホバーで質問翻訳を表示 */
+.note-is-question {
+  animation: none !important;
+}
 .note-is-question .note-main {
   font-style: italic;
   font-size: 9px;
   -webkit-line-clamp: 6;
-  opacity: 1 !important;
 }
+.note-qtrans {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  font-size: 8px;
+  line-height: 1.3;
+  text-align: center;
+  word-break: break-word;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  font-style: italic;
+}
+.note-is-question:hover .note-main  { opacity: 0; }
+.note-is-question:hover .note-qtrans { opacity: 0.85; }
 
 .en { font-size: 10.5px; }
 .ny { background: var(--y);  color: var(--ydk); }

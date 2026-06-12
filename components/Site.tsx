@@ -15,6 +15,7 @@ function Notes({ notes }: { notes: Note[] }) {
           original={n.t}
           translation={n.tr}
           question={n.q}
+          questionTranslation={n.qt}
           colorClass={n.c}
           rotClass={ROTS[i % ROTS.length]}
         />

@@ -6,11 +6,12 @@ interface FlipNoteProps {
   original: string;
   translation: string;
   question: string;
+  questionTranslation: string;
   colorClass: string;
   rotClass: string;
 }
 
-export default function FlipNote({ original, translation, question, colorClass, rotClass }: FlipNoteProps) {
+export default function FlipNote({ original, translation, question, questionTranslation, colorClass, rotClass }: FlipNoteProps) {
   const [isQuestion, setIsQuestion] = useState(false);
   const [fading, setFading] = useState(false);
 
@@ -33,9 +34,10 @@ export default function FlipNote({ original, translation, question, colorClass, 
       <span className="note-main">
         {isQuestion ? question : original}
       </span>
-      {!isQuestion && (
-        <span className="note-trans">{translation}</span>
-      )}
+      {isQuestion
+        ? <span className="note-qtrans">{questionTranslation}</span>
+        : <span className="note-trans">{translation}</span>
+      }
     </span>
   );
 }
