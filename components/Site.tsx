@@ -182,7 +182,7 @@ export default function Site() {
           </div>
           <div className="terms-block">
             <h3>アクセス制限</h3>
-            <p style={{ fontFamily: 'var(--font-jp)' }}>本サイトのURLおよび合言葉をSNSや公開の場所に投稿することは禁止します。</p>
+            <p style={{ fontFamily: 'var(--font-jp)' }}>本サイトのURLをSNSや公開の場所に投稿することは禁止します。</p>
           </div>
           <div className="terms-block">
             <h3>免責事項</h3>
