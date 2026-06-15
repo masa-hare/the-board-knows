@@ -6,7 +6,15 @@ import FlipTracker from './FlipTracker';
 
 const ROTS = ['rot-a','rot-b','rot-c','rot-d','rot-e','rot-f','rot-g','rot-h','rot-i','rot-j'];
 
-function Notes({ notes }: { notes: Note[] }) {
+// 色を散らすためのパレット。(i*2)%5 で隣り合う付箋が同色にならないよう循環させる
+const SCATTER = ['ny', 'no', 'np', 'nb', 'ng'];
+
+function scatterColor(c: string, i: number): string {
+  const color = SCATTER[(i * 2) % SCATTER.length];
+  return c.includes('en') ? `${color} en` : color;
+}
+
+function Notes({ notes, scatter = false }: { notes: Note[]; scatter?: boolean }) {
   return (
     <div className="notes-scatter">
       {notes.map((n, i) => (
@@ -16,7 +24,7 @@ function Notes({ notes }: { notes: Note[] }) {
           translation={n.tr}
           question={n.q}
           questionTranslation={n.qt}
-          colorClass={n.c}
+          colorClass={scatter ? scatterColor(n.c, i) : n.c}
           rotClass={ROTS[i % ROTS.length]}
         />
       ))}
@@ -139,7 +147,7 @@ export default function Site() {
                   </div>
                   <span className="s-no" style={{ fontFamily: 'var(--font-en)' }}>NO</span>
                 </div>
-                <Notes notes={W2} />
+                <Notes notes={W2} scatter />
               </div>
             </div>
           </div>
@@ -160,7 +168,7 @@ export default function Site() {
               <div className="whiteboard">
                 <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>何故、人は人を評価する？</div>
                 <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>Why do people judge others?</div>
-                <Notes notes={W1} />
+                <Notes notes={W1} scatter />
               </div>
             </div>
           </div>
