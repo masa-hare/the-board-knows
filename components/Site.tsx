@@ -1,4 +1,4 @@
-import { W1, W2, W3, W4, type Note } from '@/lib/data';
+import { W1, W2, W3, W4, W5, type Note } from '@/lib/data';
 import FlipNote from './FlipNote';
 import BounceTitle from './BounceTitle';
 import WrittenBoard from './WrittenBoard';
@@ -51,6 +51,27 @@ export default function Site() {
       </header>
 
       <main id="boards">
+
+        {/* Week 5 */}
+        <WrittenBoard>
+          <div className="week-section">
+            <div className="week-head">
+              <div className="week-meta">
+                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 5</span>
+                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>卒プロ・就活・人生についてアドバイス</h2>
+              </div>
+              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>Any advice regarding Degree Project / Job Hunting / Life to your juniors?</div>
+              <div className="week-bar" style={{ background: 'var(--og)' }} />
+            </div>
+            <div className="wb-outer">
+              <div className="whiteboard">
+                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>卒プロ・就活・人生についてアドバイス</div>
+                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>Any advice regarding Degree Project / Job Hunting / Life to your juniors?</div>
+                <Notes notes={W5} />
+              </div>
+            </div>
+          </div>
+        </WrittenBoard>
 
         {/* Week 4 */}
         <WrittenBoard>
