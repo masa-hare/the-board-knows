@@ -173,20 +173,24 @@ export default function Site() {
         <div className="terms-title" style={{ fontFamily: 'var(--font-en)' }}>利用規約 / Terms</div>
         <div className="terms-grid">
           <div className="terms-block">
-            <h3>掲載について</h3>
+            <h3>掲載について <span className="terms-en-head">/ About Content</span></h3>
             <p style={{ fontFamily: 'var(--font-jp)' }}>ボードに貼られた付箋の内容は、運営者の判断により編集・省略した上で掲載しています。個人名・特定の日付など個人を識別できる情報は原則掲載しません。</p>
+            <p className="terms-en">Notes from the board may be edited or omitted at the discretion of the organizers. Information that could identify individuals — such as names or specific dates — will not be published.</p>
           </div>
           <div className="terms-block">
-            <h3>プライバシー</h3>
+            <h3>プライバシー <span className="terms-en-head">/ Privacy</span></h3>
             <p style={{ fontFamily: 'var(--font-jp)' }}>本サイトは大学名・所属・個人情報を一切掲載しません。アクセスログ・Cookieなどの情報収集は行いません。</p>
+            <p className="terms-en">This site does not publish any university names, affiliations, or personal information. We do not collect access logs, cookies, or any other user data.</p>
           </div>
           <div className="terms-block">
-            <h3>アクセス制限</h3>
+            <h3>アクセス制限 <span className="terms-en-head">/ Access</span></h3>
             <p style={{ fontFamily: 'var(--font-jp)' }}>本サイトのURLをSNSや公開の場所に投稿することは禁止します。</p>
+            <p className="terms-en">Posting this site's URL on social media or other public platforms is not permitted.</p>
           </div>
           <div className="terms-block">
-            <h3>免責事項</h3>
+            <h3>免責事項 <span className="terms-en-head">/ Disclaimer</span></h3>
             <p style={{ fontFamily: 'var(--font-jp)' }}>掲載内容は参加者個人の意見・感覚であり、運営者の見解を代表するものではありません。不適切と判断される内容は予告なく削除することがあります。</p>
+            <p className="terms-en">All content reflects the personal opinions and feelings of individual participants and does not represent the views of the organizers. Content deemed inappropriate may be removed without prior notice.</p>
           </div>
         </div>
       </div>
