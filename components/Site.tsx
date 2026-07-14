@@ -1,4 +1,4 @@
-import { W1, W2, W3, W4, W5, type Note } from '@/lib/data';
+import { W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, type Note } from '@/lib/data';
 import FlipNote from './FlipNote';
 import BounceTitle from './BounceTitle';
 import WrittenBoard from './WrittenBoard';
@@ -59,6 +59,111 @@ export default function Site() {
       </header>
 
       <main id="boards">
+
+        {/* Week 10 */}
+        <WrittenBoard>
+          <div className="week-section">
+            <div className="week-head">
+              <div className="week-meta">
+                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 10</span>
+                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>あなたの願いは？for 七夕</h2>
+              </div>
+              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>What is your wish for Tanabata Festival?</div>
+              <div className="week-bar" style={{ background: 'var(--og)' }} />
+            </div>
+            <div className="wb-outer">
+              <div className="whiteboard">
+                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>あなたの願いは？for 七夕</div>
+                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>What is your wish for Tanabata Festival?</div>
+                <Notes notes={W10} />
+              </div>
+            </div>
+          </div>
+        </WrittenBoard>
+
+        {/* Week 9 */}
+        <WrittenBoard>
+          <div className="week-section">
+            <div className="week-head">
+              <div className="week-meta">
+                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 9</span>
+                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>最近、周りの人の思いやりに触れた瞬間は？</h2>
+              </div>
+              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>What's a recent moment when you experienced the kindness of the people around you?</div>
+              <div className="week-bar" style={{ background: 'var(--gn)' }} />
+            </div>
+            <div className="wb-outer">
+              <div className="whiteboard">
+                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>最近、周りの人の思いやりに触れた瞬間は？</div>
+                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>What's a recent moment when you experienced the kindness of the people around you?</div>
+                <Notes notes={W9} />
+              </div>
+            </div>
+          </div>
+        </WrittenBoard>
+
+        {/* Week 8 */}
+        <WrittenBoard>
+          <div className="week-section">
+            <div className="week-head">
+              <div className="week-meta">
+                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 8</span>
+                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>なぜ、人は満たされないの？</h2>
+              </div>
+              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>Why are people never satisfied?</div>
+              <div className="week-bar" style={{ background: 'var(--pk)' }} />
+            </div>
+            <div className="wb-outer">
+              <div className="whiteboard">
+                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>なぜ、人は満たされないの？</div>
+                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>Why are people never satisfied?</div>
+                <Notes notes={W8} />
+              </div>
+            </div>
+          </div>
+        </WrittenBoard>
+
+        {/* Week 7 */}
+        <WrittenBoard>
+          <div className="week-section">
+            <div className="week-head">
+              <div className="week-meta">
+                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 7</span>
+                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>夏クォーターで達成したい目標は？</h2>
+              </div>
+              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>What goals do you want to achieve in the Summer Quarter?</div>
+              <div className="week-bar" style={{ background: 'var(--y)' }} />
+            </div>
+            <div className="wb-outer">
+              <div className="whiteboard">
+                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>夏クォーターで達成したい目標は？</div>
+                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>What goals do you want to achieve in the Summer Quarter?</div>
+                <Notes notes={W7} />
+              </div>
+            </div>
+          </div>
+        </WrittenBoard>
+
+        {/* Week 6 */}
+        <WrittenBoard>
+          <div className="week-section">
+            <div className="week-head">
+              <div className="week-meta">
+                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 6</span>
+                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>今の年になって気づいたお父さん/おじいちゃんのやさしさは？</h2>
+              </div>
+              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>What are some acts of kindness from your father/grandfather that you only came to appreciate as you got older?</div>
+              <div className="week-bar" style={{ background: 'var(--bl)' }} />
+            </div>
+            <div className="wb-outer">
+              <div className="whiteboard">
+                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>今の年になって気づいたお父さん/おじいちゃんのやさしさは？</div>
+                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>What are some acts of kindness from your father/grandfather that you only came to appreciate as you got older?</div>
+                <Notes notes={W6} />
+              </div>
+            </div>
+          </div>
+        </WrittenBoard>
 
         {/* Week 5 */}
         <WrittenBoard>
