@@ -22,32 +22,6 @@ export default function WrittenBoard({ children }: { children: ReactNode }) {
     return () => obs.disconnect();
   }, []);
 
-  useEffect(() => {
-    if (!active) return;
-    const el = ref.current;
-    if (!el) return;
-
-    // 入場stagger用インデックスをセット
-    const notes = el.querySelectorAll('.note');
-    notes.forEach((note, i) => {
-      (note as HTMLElement).style.setProperty('--note-i', String(i));
-    });
-
-    // 入場アニメが終わったあと、各付箋にバラバラのホップ遅延をセットして生き生きさせる
-    const maxEntrance = 500 + notes.length * 70 + 600; // ms
-    const timer = setTimeout(() => {
-      notes.forEach((note) => {
-        const el = note as HTMLElement;
-        const delay = (8 + Math.random() * 40).toFixed(2); // 8〜48s：最初の8秒は静かに、以降48sサイクルで均等にばらける
-        el.style.setProperty('--hop-delay', `${delay}s`);
-        el.style.opacity = '1'; // note-hop は opacity を扱わないため明示
-        el.classList.add('note-alive');
-      });
-    }, maxEntrance);
-
-    return () => clearTimeout(timer);
-  }, [active]);
-
   return (
     <div ref={ref} className={`wb-anim${active ? ' wb-anim--on' : ''}`}>
       {children}

@@ -4,13 +4,24 @@
   --bl: #A8D8F0; --bldk: #002f48;
   --gn: #B8E6B0; --gndk: #153d11;
   --og: #FFD0A0; --ogdk: #4a2600;
-  --ink: #1a1a1a; --muted: #aaa; --cream: #FDFCF7;
+  --ink: #1a1a1a; --muted: #686D75; --cream: #FDFCF7;
   --font-jp: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
 }
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
 body { background: var(--cream); color: var(--ink); }
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
 
 /* ══════════════════════════════════════
    GATE
@@ -164,7 +175,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
 }
 .wb-anim--on .note {
   animation: note-stick 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)
-    calc(0.5s + var(--note-i, 0) * 0.07s) forwards;
+    calc(0.12s + var(--note-delay, 0ms)) forwards;
 }
 
 @keyframes note-stick {
@@ -172,19 +183,9 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
   to   { opacity: 1; scale: 1;    translate: 0 0; }
 }
 
-/* ⑥ 付箋ホップ：入場後にぴょこっと生き始める */
-@keyframes note-hop {
-  0%, 4%, 100% { translate: 0 0;    scale: 1; }
-  2%           { translate: 0 -8px; scale: 1.05; }
-  3.5%         { translate: 0 -2px; scale: 1.01; }
-}
-
-/* 入場アニメより高い詳細度で上書き・opacity を明示して隠れないようにする */
-.wb-anim--on .note.note-alive {
-  opacity: 1;
-  will-change: translate, scale;
-  animation: note-hop 48s cubic-bezier(0.34, 1.56, 0.64, 1)
-    var(--hop-delay, 0s) infinite;
+.wb-anim {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }
 
 /* ══════════════════════════════════════
@@ -216,7 +217,8 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
 .note {
   display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
   width: 96px; height: 96px; padding: 9px; border-radius: 3px;
-  font-size: 10px; line-height: 1.45; text-align: center;
+  border: 0; appearance: none; font: inherit;
+  font-size: 11px; line-height: 1.45; text-align: center;
   box-shadow: 2px 3px 0 rgba(0,0,0,.13), 0 1px 2px rgba(0,0,0,.05);
   cursor: default; word-break: break-word; overflow: hidden; position: relative;
   transition: opacity 0.14s ease;
@@ -241,6 +243,13 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
   z-index: 10;
 }
 .note-interactive { cursor: pointer; }
+.note-interactive:focus-visible {
+  outline: 3px solid #1F5F9B;
+  outline-offset: 4px;
+  scale: 1.08;
+  rotate: 0deg;
+  z-index: 20;
+}
 .note-fading      { opacity: 0 !important; }
 
 /* 翻訳：note-main をフェードアウトしつつ同じ枠内にオーバーレイ表示 */
@@ -257,7 +266,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
   align-items: center;
   justify-content: center;
   padding: 9px;
-  font-size: 9.5px;
+  font-size: 10px;
   font-style: italic;
   line-height: 1.45;
   text-align: center;
@@ -266,7 +275,9 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
   transition: opacity 0.3s ease;
   pointer-events: none;
 }
-.note-interactive:hover .note-trans { opacity: 0.85; }
+.note-interactive:hover .note-trans,
+.note-interactive:focus-visible .note-trans { opacity: 0.9; }
+.note-interactive:focus-visible .note-main { opacity: 0; }
 
 /* 問い状態：ホップ停止、ホバーで質問翻訳を表示 */
 .note-is-question {
@@ -274,7 +285,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
 }
 .note-is-question .note-main {
   font-style: italic;
-  font-size: 9px;
+  font-size: 9.5px;
   -webkit-line-clamp: 6;
 }
 .note-qtrans {
@@ -284,7 +295,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
   align-items: center;
   justify-content: center;
   padding: 6px;
-  font-size: 8px;
+  font-size: 9px;
   line-height: 1.3;
   text-align: center;
   word-break: break-word;
@@ -294,7 +305,8 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
   font-style: italic;
 }
 .note-is-question:hover .note-main  { opacity: 0; }
-.note-is-question:hover .note-qtrans { opacity: 0.85; }
+.note-is-question:hover .note-qtrans,
+.note-is-question:focus-visible .note-qtrans { opacity: 0.9; }
 
 .en { font-size: 10.5px; }
 .ny { background: var(--y);  color: var(--ydk); }
@@ -322,7 +334,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
 }
 .s-bar::after {
   content: 'Neutral'; position: absolute; top: -15px; left: 50%;
-  transform: translateX(-50%); font-size: 9px; color: #ccc;
+  transform: translateX(-50%); font-size: 9px; color: var(--muted);
   font-family: var(--font-en), sans-serif;
 }
 .s-tick {
@@ -375,12 +387,17 @@ main { max-width: 1100px; margin: 0 auto; padding: 4rem 1.5rem 5rem; }
   border-top: 1px solid rgba(0,0,0,.06); max-width: 1100px;
   margin: 0 auto; padding: 3rem 1.5rem 2rem;
 }
-.terms-title { font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.5rem; }
+.terms-title { font-size: 11px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.5rem; }
 .terms-grid  { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
 .terms-block h3 { font-size: 12px; font-weight: 500; color: var(--ink); margin-bottom: .5rem; }
 .terms-block p  { font-size: 11.5px; color: var(--muted); line-height: 1.75; }
 .terms-en-head  { font-weight: 400; color: var(--muted); }
-.terms-en       { font-size: 11px; color: var(--muted); line-height: 1.75; margin-top: .4rem; opacity: .75; font-family: var(--font-en); }
+.terms-en       { font-size: 11px; color: var(--muted); line-height: 1.75; margin-top: .4rem; font-family: var(--font-en); }
+.privacy-link   { display: inline-block; margin-top: .45rem; font-size: 11px; color: var(--ink); text-underline-offset: 2px; }
+.privacy-link:hover { text-decoration-thickness: 2px; }
+.privacy-link:focus-visible,
+.footer-left a:focus-visible,
+.hero-btn:focus-visible { outline: 2px solid #1F5F9B; outline-offset: 4px; border-radius: 2px; }
 
 /* ══════════════════════════════════════
    FOOTER
@@ -393,7 +410,7 @@ footer {
 .footer-left { font-size: 11px; color: var(--muted); line-height: 1.8; }
 .footer-left a { color: var(--muted); text-decoration: underline; transition: color .2s; }
 .footer-left a:hover { color: var(--ink); }
-.footer-team { font-size: 10px; color: var(--muted); opacity: .4; }
+.footer-team { font-size: 10px; color: var(--muted); }
 
 /* ══════════════════════════════════════
    MOBILE
@@ -427,7 +444,7 @@ footer {
     color: var(--muted);
     text-align: center;
     margin-bottom: .5rem;
-    opacity: .7;
+    opacity: 1;
   }
 
   /* 規約 */
@@ -443,4 +460,27 @@ footer {
 
 @media (max-width: 380px) {
   .hero-stickies { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+
+  .bounce-char,
+  .hero-sticky,
+  .note,
+  .flip-tracker,
+  .flip-tracker-msg {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .wb-anim .week-head,
+  .wb-anim .board-q,
+  .wb-anim .board-q-en,
+  .wb-anim .spectrum,
+  .wb-anim .note {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+  }
 }

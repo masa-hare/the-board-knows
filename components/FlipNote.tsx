@@ -1,19 +1,33 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, type CSSProperties } from 'react';
 
 interface FlipNoteProps {
+  noteId: string;
   original: string;
   translation: string;
   question: string;
   questionTranslation: string;
   colorClass: string;
   rotClass: string;
+  describedBy?: string;
+  style?: CSSProperties;
 }
 
-export default function FlipNote({ original, translation, question, questionTranslation, colorClass, rotClass }: FlipNoteProps) {
+export default function FlipNote({
+  noteId,
+  original,
+  translation,
+  question,
+  questionTranslation,
+  colorClass,
+  rotClass,
+  describedBy,
+  style,
+}: FlipNoteProps) {
   const [isQuestion, setIsQuestion] = useState(false);
   const [fading, setFading] = useState(false);
+  const currentText = isQuestion ? question : original;
 
   function handleClick() {
     if (fading) return;
@@ -22,22 +36,28 @@ export default function FlipNote({ original, translation, question, questionTran
       const next = !isQuestion;
       setIsQuestion(next);
       setFading(false);
-      if (next) window.dispatchEvent(new CustomEvent('note-questioned'));
+      if (next) {
+        window.dispatchEvent(new CustomEvent('note-questioned', { detail: noteId }));
+      }
     }, 130);
   }
 
   return (
-    <span
+    <button
+      type="button"
       className={`note ${colorClass} ${rotClass} note-interactive${isQuestion ? ' note-is-question' : ''}${fading ? ' note-fading' : ''}`}
       onClick={handleClick}
+      aria-pressed={isQuestion}
+      aria-describedby={describedBy}
+      style={style}
     >
       <span className="note-main">
-        {isQuestion ? question : original}
+        {currentText}
       </span>
       {isQuestion
-        ? <span className="note-qtrans">{questionTranslation}</span>
-        : <span className="note-trans">{translation}</span>
+        ? <span className="note-qtrans"><span className="sr-only">翻訳: </span>{questionTranslation}</span>
+        : <span className="note-trans"><span className="sr-only">翻訳: </span>{translation}</span>
       }
-    </span>
+    </button>
   );
 }

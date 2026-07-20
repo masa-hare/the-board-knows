@@ -11,6 +11,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   title: 'the board knows',
+  description: '毎週ひとつの問いと、ホワイトボードに集まった匿名の声を記録するアーカイブ。',
   robots: { index: false, follow: false },
 };
 

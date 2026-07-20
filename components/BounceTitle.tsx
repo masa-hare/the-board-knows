@@ -13,10 +13,10 @@ export default function BounceTitle() {
   }
 
   return (
-    <h1 className="hero-title" style={{ fontFamily: 'var(--font-en)' }}>
-      <span className="bounce-line">{renderChars(line1)}</span>
+    <h1 className="hero-title" aria-label="the board knows" style={{ fontFamily: 'var(--font-en)' }}>
+      <span className="bounce-line" aria-hidden="true">{renderChars(line1)}</span>
       <br />
-      <span className="bounce-line">{renderChars(line2)}</span>
+      <span className="bounce-line" aria-hidden="true">{renderChars(line2)}</span>
     </h1>
   );
 }

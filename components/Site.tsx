@@ -1,39 +1,145 @@
+import type { CSSProperties } from 'react';
 import { W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, type Note } from '@/lib/data';
-import FlipNote from './FlipNote';
 import BounceTitle from './BounceTitle';
-import WrittenBoard from './WrittenBoard';
+import FlipNote from './FlipNote';
 import FlipTracker from './FlipTracker';
+import WrittenBoard from './WrittenBoard';
 
-const ROTS = ['rot-a','rot-b','rot-c','rot-d','rot-e','rot-f','rot-g','rot-h','rot-i','rot-j'];
-
-// 色を散らすためのパレット。(i*2)%5 で隣り合う付箋が同色にならないよう循環させる
+const ROTS = ['rot-a', 'rot-b', 'rot-c', 'rot-d', 'rot-e', 'rot-f', 'rot-g', 'rot-h', 'rot-i', 'rot-j'];
 const SCATTER = ['ny', 'no', 'np', 'nb', 'ng'];
 
-function scatterColor(c: string, i: number): string {
-  const color = SCATTER[(i * 2) % SCATTER.length];
-  return c.includes('en') ? `${color} en` : color;
+type Week = {
+  number: number;
+  questionJa: string;
+  questionEn: string;
+  notes: Note[];
+  barColor: string;
+  scatter?: boolean;
+  spectrum?: boolean;
+};
+
+const WEEKS: Week[] = [
+  {
+    number: 10,
+    questionJa: 'あなたの願いは？for 七夕',
+    questionEn: 'What is your wish for Tanabata Festival?',
+    notes: W10,
+    barColor: 'var(--og)',
+  },
+  {
+    number: 9,
+    questionJa: '最近、周りの人の思いやりに触れた瞬間は？',
+    questionEn: "What's a recent moment when you experienced the kindness of the people around you?",
+    notes: W9,
+    barColor: 'var(--gn)',
+  },
+  {
+    number: 8,
+    questionJa: 'なぜ、人は満たされないの？',
+    questionEn: 'Why are people never satisfied?',
+    notes: W8,
+    barColor: 'var(--pk)',
+  },
+  {
+    number: 7,
+    questionJa: '夏クォーターで達成したい目標は？',
+    questionEn: 'What goals do you want to achieve in the Summer Quarter?',
+    notes: W7,
+    barColor: 'var(--y)',
+  },
+  {
+    number: 6,
+    questionJa: '今の年になって気づいたお父さん/おじいちゃんのやさしさは？',
+    questionEn: 'What are some acts of kindness from your father/grandfather that you only came to appreciate as you got older?',
+    notes: W6,
+    barColor: 'var(--bl)',
+  },
+  {
+    number: 5,
+    questionJa: '卒プロ・就活・人生についてアドバイス',
+    questionEn: 'Any advice regarding Degree Project / Job Hunting / Life to your juniors?',
+    notes: W5,
+    barColor: 'var(--og)',
+  },
+  {
+    number: 4,
+    questionJa: '最近、気がついてしまったことは？',
+    questionEn: "What's a moment recently where you just had to pause & take notice of something?",
+    notes: W4,
+    barColor: 'var(--gn)',
+  },
+  {
+    number: 3,
+    questionJa: '人を好きになる瞬間は？',
+    questionEn: 'When do you fall in love with someone?',
+    notes: W3,
+    barColor: 'var(--pk)',
+  },
+  {
+    number: 2,
+    questionJa: '嘘って悪いこと？なぜ？',
+    questionEn: 'Is lying a bad thing? Why?',
+    notes: W2,
+    barColor: 'var(--y)',
+    scatter: true,
+    spectrum: true,
+  },
+  {
+    number: 1,
+    questionJa: '何故、人は人を評価する？',
+    questionEn: 'Why do people judge others?',
+    notes: W1,
+    barColor: 'var(--bl)',
+    scatter: true,
+  },
+];
+
+const TOTAL_NOTES = WEEKS.reduce((total, week) => total + week.notes.length, 0);
+
+function scatterColor(colorClass: string, index: number): string {
+  const color = SCATTER[(index * 2) % SCATTER.length];
+  return colorClass.includes('en') ? `${color} en` : color;
 }
 
-function Notes({ notes, scatter = false }: { notes: Note[]; scatter?: boolean }) {
+function Notes({ notes, weekNumber, scatter = false }: { notes: Note[]; weekNumber: number; scatter?: boolean }) {
   return (
     <div className="notes-scatter">
-      {notes.map((n, i) => (
+      {notes.map((note, index) => (
         <FlipNote
-          key={i}
-          original={n.t}
-          translation={n.tr}
-          question={n.q}
-          questionTranslation={n.qt}
-          colorClass={scatter ? scatterColor(n.c, i) : n.c}
-          rotClass={ROTS[i % ROTS.length]}
+          key={`${weekNumber}-${index}`}
+          noteId={`week-${weekNumber}-note-${index}`}
+          original={note.t}
+          translation={note.tr}
+          question={note.q}
+          questionTranslation={note.qt}
+          colorClass={scatter ? scatterColor(note.c, index) : note.c}
+          rotClass={ROTS[index % ROTS.length]}
+          describedBy={weekNumber === WEEKS[0].number && index === 0 ? 'note-help' : undefined}
+          style={{ '--note-delay': `${Math.min(index, 24) * 18}ms` } as CSSProperties}
         />
       ))}
     </div>
   );
 }
 
+function Spectrum() {
+  return (
+    <div className="spectrum" aria-label="YESからNOまでの回答スペクトラム">
+      <span className="s-yes" style={{ fontFamily: 'var(--font-en)' }}>YES</span>
+      <div className="s-bar" aria-hidden="true">
+        <div className="s-tick" style={{ left: '25%' }} />
+        <div className="s-tick" style={{ left: '50%' }} />
+        <div className="s-tick" style={{ left: '75%' }} />
+      </div>
+      <span className="s-no" style={{ fontFamily: 'var(--font-en)' }}>NO</span>
+    </div>
+  );
+}
+
 const CONTACT_URL =
   'https://forms.office.com/Pages/ResponsePage.aspx?id=vZCqJ23idkalH3Ijfa846GQ1pPuciSNIp8bmvoYP9x9UM0dKOExSTVdHMDlNQlRZQTFIMEFQQVFSQS4u';
+
+const VERCEL_PRIVACY_URL = 'https://vercel.com/legal/privacy-notice';
 
 export default function Site() {
   return (
@@ -58,255 +164,65 @@ export default function Site() {
         <div className="header-sub" style={{ fontFamily: 'var(--font-jp)' }}>とある大学のホワイトボードより</div>
       </header>
 
+      <p id="note-help" className="sr-only">付箋ボタン。押すと回答と問いが切り替わります。原文に続けて翻訳を読み上げます。</p>
+
       <main id="boards">
+        {WEEKS.map((week) => {
+          const titleId = `week-${week.number}-title`;
 
-        {/* Week 10 */}
-        <WrittenBoard>
-          <div className="week-section">
-            <div className="week-head">
-              <div className="week-meta">
-                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 10</span>
-                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>あなたの願いは？for 七夕</h2>
-              </div>
-              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>What is your wish for Tanabata Festival?</div>
-              <div className="week-bar" style={{ background: 'var(--og)' }} />
-            </div>
-            <div className="wb-outer">
-              <div className="whiteboard">
-                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>あなたの願いは？for 七夕</div>
-                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>What is your wish for Tanabata Festival?</div>
-                <Notes notes={W10} />
-              </div>
-            </div>
-          </div>
-        </WrittenBoard>
-
-        {/* Week 9 */}
-        <WrittenBoard>
-          <div className="week-section">
-            <div className="week-head">
-              <div className="week-meta">
-                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 9</span>
-                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>最近、周りの人の思いやりに触れた瞬間は？</h2>
-              </div>
-              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>What's a recent moment when you experienced the kindness of the people around you?</div>
-              <div className="week-bar" style={{ background: 'var(--gn)' }} />
-            </div>
-            <div className="wb-outer">
-              <div className="whiteboard">
-                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>最近、周りの人の思いやりに触れた瞬間は？</div>
-                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>What's a recent moment when you experienced the kindness of the people around you?</div>
-                <Notes notes={W9} />
-              </div>
-            </div>
-          </div>
-        </WrittenBoard>
-
-        {/* Week 8 */}
-        <WrittenBoard>
-          <div className="week-section">
-            <div className="week-head">
-              <div className="week-meta">
-                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 8</span>
-                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>なぜ、人は満たされないの？</h2>
-              </div>
-              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>Why are people never satisfied?</div>
-              <div className="week-bar" style={{ background: 'var(--pk)' }} />
-            </div>
-            <div className="wb-outer">
-              <div className="whiteboard">
-                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>なぜ、人は満たされないの？</div>
-                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>Why are people never satisfied?</div>
-                <Notes notes={W8} />
-              </div>
-            </div>
-          </div>
-        </WrittenBoard>
-
-        {/* Week 7 */}
-        <WrittenBoard>
-          <div className="week-section">
-            <div className="week-head">
-              <div className="week-meta">
-                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 7</span>
-                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>夏クォーターで達成したい目標は？</h2>
-              </div>
-              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>What goals do you want to achieve in the Summer Quarter?</div>
-              <div className="week-bar" style={{ background: 'var(--y)' }} />
-            </div>
-            <div className="wb-outer">
-              <div className="whiteboard">
-                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>夏クォーターで達成したい目標は？</div>
-                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>What goals do you want to achieve in the Summer Quarter?</div>
-                <Notes notes={W7} />
-              </div>
-            </div>
-          </div>
-        </WrittenBoard>
-
-        {/* Week 6 */}
-        <WrittenBoard>
-          <div className="week-section">
-            <div className="week-head">
-              <div className="week-meta">
-                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 6</span>
-                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>今の年になって気づいたお父さん/おじいちゃんのやさしさは？</h2>
-              </div>
-              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>What are some acts of kindness from your father/grandfather that you only came to appreciate as you got older?</div>
-              <div className="week-bar" style={{ background: 'var(--bl)' }} />
-            </div>
-            <div className="wb-outer">
-              <div className="whiteboard">
-                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>今の年になって気づいたお父さん/おじいちゃんのやさしさは？</div>
-                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>What are some acts of kindness from your father/grandfather that you only came to appreciate as you got older?</div>
-                <Notes notes={W6} />
-              </div>
-            </div>
-          </div>
-        </WrittenBoard>
-
-        {/* Week 5 */}
-        <WrittenBoard>
-          <div className="week-section">
-            <div className="week-head">
-              <div className="week-meta">
-                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 5</span>
-                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>卒プロ・就活・人生についてアドバイス</h2>
-              </div>
-              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>Any advice regarding Degree Project / Job Hunting / Life to your juniors?</div>
-              <div className="week-bar" style={{ background: 'var(--og)' }} />
-            </div>
-            <div className="wb-outer">
-              <div className="whiteboard">
-                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>卒プロ・就活・人生についてアドバイス</div>
-                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>Any advice regarding Degree Project / Job Hunting / Life to your juniors?</div>
-                <Notes notes={W5} />
-              </div>
-            </div>
-          </div>
-        </WrittenBoard>
-
-        {/* Week 4 */}
-        <WrittenBoard>
-          <div className="week-section">
-            <div className="week-head">
-              <div className="week-meta">
-                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 4</span>
-                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>最近、気がついてしまったことは？</h2>
-              </div>
-              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>What's a moment recently where you just had to pause & take notice of something?</div>
-              <div className="week-bar" style={{ background: 'var(--gn)' }} />
-            </div>
-            <div className="wb-outer">
-              <div className="whiteboard">
-                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>最近、気がついてしまったことは？</div>
-                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>What's a moment recently where you just had to pause & take notice of something?</div>
-                <Notes notes={W4} />
-              </div>
-            </div>
-          </div>
-        </WrittenBoard>
-
-        {/* Week 3 */}
-        <WrittenBoard>
-          <div className="week-section">
-            <div className="week-head">
-              <div className="week-meta">
-                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 3</span>
-                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>人を好きになる瞬間は？</h2>
-              </div>
-              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>When do you fall in love with someone?</div>
-              <div className="week-bar" style={{ background: 'var(--pk)' }} />
-            </div>
-            <div className="wb-outer">
-              <div className="whiteboard">
-                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>人を好きになる瞬間は？</div>
-                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>When do you fall in love with someone?</div>
-                <Notes notes={W3} />
-              </div>
-            </div>
-          </div>
-        </WrittenBoard>
-
-        {/* Week 2 */}
-        <WrittenBoard>
-          <div className="week-section">
-            <div className="week-head">
-              <div className="week-meta">
-                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 2</span>
-                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>嘘って悪いこと？なぜ？</h2>
-              </div>
-              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>Is lying a bad thing? Why?</div>
-              <div className="week-bar" style={{ background: 'var(--y)' }} />
-            </div>
-            <div className="wb-outer">
-              <div className="whiteboard">
-                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>嘘って悪いこと？なぜ？</div>
-                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>Is lying a bad thing? Why?</div>
-                <div className="spectrum">
-                  <span className="s-yes" style={{ fontFamily: 'var(--font-en)' }}>YES</span>
-                  <div className="s-bar">
-                    <div className="s-tick" style={{ left: '25%' }} />
-                    <div className="s-tick" style={{ left: '50%' }} />
-                    <div className="s-tick" style={{ left: '75%' }} />
+          return (
+            <WrittenBoard key={week.number}>
+              <section className="week-section" aria-labelledby={titleId}>
+                <div className="week-head">
+                  <div className="week-meta">
+                    <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week {week.number}</span>
+                    <h2 id={titleId} className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>{week.questionJa}</h2>
                   </div>
-                  <span className="s-no" style={{ fontFamily: 'var(--font-en)' }}>NO</span>
+                  <div className="week-q-en" lang="en" style={{ fontFamily: 'var(--font-en)' }}>{week.questionEn}</div>
+                  <div className="week-bar" style={{ background: week.barColor }} aria-hidden="true" />
                 </div>
-                <Notes notes={W2} scatter />
-              </div>
-            </div>
-          </div>
-        </WrittenBoard>
-
-        {/* Week 1 */}
-        <WrittenBoard>
-          <div className="week-section">
-            <div className="week-head">
-              <div className="week-meta">
-                <span className="week-num" style={{ fontFamily: 'var(--font-en)' }}>Week 1</span>
-                <h2 className="week-q-jp" style={{ fontFamily: 'var(--font-jp)' }}>何故、人は人を評価する？</h2>
-              </div>
-              <div className="week-q-en" style={{ fontFamily: 'var(--font-en)' }}>Why do people judge others?</div>
-              <div className="week-bar" style={{ background: 'var(--bl)' }} />
-            </div>
-            <div className="wb-outer">
-              <div className="whiteboard">
-                <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>何故、人は人を評価する？</div>
-                <div className="board-q-en" style={{ fontFamily: 'var(--font-en)' }}>Why do people judge others?</div>
-                <Notes notes={W1} scatter />
-              </div>
-            </div>
-          </div>
-        </WrittenBoard>
-
+                <div className="wb-outer">
+                  <div className="whiteboard" role="group" aria-label={`Week ${week.number}: ${week.questionJa}`}>
+                    <div className="board-q" style={{ fontFamily: 'var(--font-jp)' }}>{week.questionJa}</div>
+                    <div className="board-q-en" lang="en" style={{ fontFamily: 'var(--font-en)' }}>{week.questionEn}</div>
+                    {week.spectrum ? <Spectrum /> : null}
+                    <Notes notes={week.notes} weekNumber={week.number} scatter={week.scatter} />
+                  </div>
+                </div>
+              </section>
+            </WrittenBoard>
+          );
+        })}
       </main>
 
-      {/* Terms */}
-      <div className="terms-section">
-        <div className="terms-title" style={{ fontFamily: 'var(--font-en)' }}>利用規約 / Terms</div>
+      <section className="terms-section" aria-labelledby="terms-title">
+        <h2 id="terms-title" className="terms-title" style={{ fontFamily: 'var(--font-en)' }}>利用規約 / Terms</h2>
         <div className="terms-grid">
           <div className="terms-block">
             <h3>掲載について <span className="terms-en-head">/ About Content</span></h3>
-            <p style={{ fontFamily: 'var(--font-jp)' }}>ボードに貼られた付箋の内容は、運営者の判断により編集・省略した上で掲載しています。個人名・特定の日付など個人を識別できる情報は原則掲載しません。</p>
-            <p className="terms-en">Notes from the board may be edited or omitted at the discretion of the organizers. Information that could identify individuals — such as names or specific dates — will not be published.</p>
+            <p style={{ fontFamily: 'var(--font-jp)' }}>付箋は、意味を損なわない範囲で編集・匿名化した上で掲載しています。個人名、所属、施設名、特定の日付など、個人や場所を識別できる情報は掲載しません。</p>
+            <p className="terms-en" lang="en">Notes are edited and anonymized without changing their intent. Names, affiliations, facility names, specific dates, and other identifying details are not published.</p>
           </div>
           <div className="terms-block">
             <h3>プライバシー <span className="terms-en-head">/ Privacy</span></h3>
-            <p style={{ fontFamily: 'var(--font-jp)' }}>本サイトは大学名・所属・個人情報を一切掲載しません。アクセスログ・Cookieなどの情報収集は行いません。</p>
-            <p className="terms-en">This site does not publish any university names, affiliations, or personal information. We do not collect access logs, cookies, or any other user data.</p>
+            <p style={{ fontFamily: 'var(--font-jp)' }}>本サイト独自のCookieやアクセス解析は使用しません。配信にはVercelを利用しており、通信に伴うIPアドレスなどの情報が同社の方針に基づき処理される場合があります。</p>
+            <p className="terms-en" lang="en">This site does not use its own cookies or analytics. It is hosted on Vercel, which may process information such as IP addresses under its privacy policy.</p>
+            <a className="privacy-link" href={VERCEL_PRIVACY_URL} target="_blank" rel="noopener noreferrer">
+              Vercel Privacy Notice
+            </a>
           </div>
           <div className="terms-block">
-            <h3>アクセス制限 <span className="terms-en-head">/ Access</span></h3>
-            <p style={{ fontFamily: 'var(--font-jp)' }}>本サイトのURLをSNSや公開の場所に投稿することは禁止します。</p>
-            <p className="terms-en">Posting this site's URL on social media or other public platforms is not permitted.</p>
+            <h3>URLの取り扱い <span className="terms-en-head">/ URL Sharing</span></h3>
+            <p style={{ fontFamily: 'var(--font-jp)' }}>本サイトはURLを知っている方が閲覧できる公開ページです。付箋を書いた方への配慮として、URLのSNS投稿や不特定多数への拡散は控えてください。</p>
+            <p className="terms-en" lang="en">Anyone with the URL can view this public page. Out of respect for contributors, please do not post the URL on social media or distribute it broadly.</p>
           </div>
           <div className="terms-block">
             <h3>免責事項 <span className="terms-en-head">/ Disclaimer</span></h3>
             <p style={{ fontFamily: 'var(--font-jp)' }}>掲載内容は参加者個人の意見・感覚であり、運営者の見解を代表するものではありません。不適切と判断される内容は予告なく削除することがあります。</p>
-            <p className="terms-en">All content reflects the personal opinions and feelings of individual participants and does not represent the views of the organizers. Content deemed inappropriate may be removed without prior notice.</p>
+            <p className="terms-en" lang="en">All content reflects the personal opinions and feelings of individual participants and does not represent the views of the organizers. Content deemed inappropriate may be removed without prior notice.</p>
           </div>
         </div>
-      </div>
+      </section>
 
       <footer>
         <div className="footer-left" style={{ fontFamily: 'var(--font-jp)' }}>
@@ -318,7 +234,7 @@ export default function Site() {
         <div className="footer-team" style={{ fontFamily: 'var(--font-jp)' }}>でっかいおまんじゅう</div>
       </footer>
 
-      <FlipTracker />
+      <FlipTracker totalNotes={TOTAL_NOTES} />
     </>
   );
 }
