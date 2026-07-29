@@ -1,6 +1,7 @@
 {
   "name": "the-board-knows",
   "version": "0.1.0",
+  "type": "module",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -8,7 +9,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node scripts/validate-content.mjs",
+    "test": "node scripts/validate-content.mjs && node --experimental-strip-types --test tests/note-view.test.mts",
     "check": "npm run test && npm run lint && npm run typecheck && npm run build"
   },
   "dependencies": {

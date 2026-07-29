@@ -164,7 +164,14 @@ export default function Site() {
         <div className="header-sub" style={{ fontFamily: 'var(--font-jp)' }}>とある大学のホワイトボードより</div>
       </header>
 
-      <p id="note-help" className="sr-only">付箋ボタン。押すと回答と問いが切り替わります。原文に続けて翻訳を読み上げます。</p>
+      <p id="note-help" className="sr-only">
+        付箋ボタン。マウスではカーソルを合わせると英訳、クリックすると問いに切り替わります。タッチ操作では、タップするたびに英訳、問い、問いの英訳、回答の順に切り替わります。
+      </p>
+
+      <p className="note-help-visible" aria-hidden="true">
+        <span className="note-help-desktop">カーソルで英訳・クリックで問い</span>
+        <span className="note-help-touch">タップで 英訳 → 問い → 問いの英訳 → 回答</span>
+      </p>
 
       <main id="boards">
         {WEEKS.map((week) => {
