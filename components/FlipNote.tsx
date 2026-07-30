@@ -86,6 +86,9 @@ export default function FlipNote({
       {view === 'answer' ? (
         <span className="note-trans"><span className="sr-only">翻訳: </span>{translation}</span>
       ) : null}
+      {view === 'question' ? (
+        <span className="note-qtrans"><span className="sr-only">問いの翻訳: </span>{questionTranslation}</span>
+      ) : null}
       {modeLabel ? <span className="note-mode" aria-hidden="true">{modeLabel}</span> : null}
     </button>
   );

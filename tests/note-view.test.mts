@@ -34,3 +34,13 @@ test('question state never disables the entrance animation that keeps notes visi
   assert.equal(questionRule, null, 'Do not add a .note-is-question rule that overrides note animation');
   assert.doesNotMatch(css, /\.note-main\s*\{[^}]*transition:\s*opacity/su);
 });
+
+test('pointer hover exposes the question translation', async () => {
+  const [css, component] = await Promise.all([
+    readFile(new URL('../app/globals.css', import.meta.url), 'utf8'),
+    readFile(new URL('../components/FlipNote.tsx', import.meta.url), 'utf8'),
+  ]);
+
+  assert.match(component, /view === 'question'[\s\S]*note-qtrans/u);
+  assert.match(css, /\[data-note-view='question'\]:hover \.note-qtrans\s*\{[^}]*opacity:\s*0\.9/su);
+});
