@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
 import test from 'node:test';
 
 import { getNextNoteView, type NoteView } from '../lib/noteView.ts';
@@ -24,4 +25,12 @@ test('pointer input toggles directly between answer and question', () => {
   assert.equal(getNextNoteView('question', 'pointer'), 'answer');
   assert.equal(getNextNoteView('translation', 'pointer'), 'question');
   assert.equal(getNextNoteView('questionTranslation', 'pointer'), 'answer');
+});
+
+test('question state never disables the entrance animation that keeps notes visible', async () => {
+  const css = await readFile(new URL('../app/globals.css', import.meta.url), 'utf8');
+  const questionRule = css.match(/\.note-is-question\s*\{([^}]*)\}/u);
+
+  assert.equal(questionRule, null, 'Do not add a .note-is-question rule that overrides note animation');
+  assert.doesNotMatch(css, /\.note-main\s*\{[^}]*transition:\s*opacity/su);
 });
