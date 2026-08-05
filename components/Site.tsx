@@ -1,5 +1,5 @@
 import type { CSSProperties } from 'react';
-import { W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, type Note } from '@/lib/data';
+import { W1, W2, W3, W4, W5, W6, W7, W8, W9, W10, W11, type Note } from '@/lib/data';
 import BounceTitle from './BounceTitle';
 import FlipNote from './FlipNote';
 import FlipTracker from './FlipTracker';
@@ -19,6 +19,13 @@ type Week = {
 };
 
 const WEEKS: Week[] = [
+  {
+    number: 11,
+    questionJa: 'みんなに伝えたい、この大学の良いところ・改善してほしいところは？',
+    questionEn: 'What good points and areas for improvement about this university do you want everyone to know?',
+    notes: W11,
+    barColor: 'var(--bl)',
+  },
   {
     number: 10,
     questionJa: 'あなたの願いは？for 七夕',
